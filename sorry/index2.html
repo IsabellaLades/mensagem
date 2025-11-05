@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Mensagem Especial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400&display=swap');
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: radial-gradient(circle at center, #0c1a2e, #000020);
+    font-family: 'Poppins', sans-serif;
+    color: #e0e6f8;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .container {
+    max-width: 600px;
+    background: rgba(12, 26, 46, 0.7);
+    border-radius: 15px;
+    padding: 30px 25px;
+    box-shadow: 0 0 30px #224477aa;
+    z-index: 10;
+  }
+
+  h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+    color: #87CEEB;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(135, 206, 250, 0.7);
+  }
+
+  /* --- Efeito de subida --- */
+  #text p {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 700ms ease, transform 700ms ease;
+    margin: 0.6em 0;
+  }
+
+  #text p.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .highlight {
+    color: #87CEEB;
+    text-shadow: 0 0 8px rgba(135,206,250,0.5);
+    font-weight: 600;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  #playBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(135, 206, 250, 0.6);
+    z-index: 9999;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+  }
+
+  #playBtn:hover {
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✨Então será assim? ✨</h1>
+  <div id="text">
+<p>Você me bloqueou? Haha… vou dar um jeito de tu ver isso.</p>    
+<p>Boa noite/Bom dia, moço.<br>Obrigada por tudo — de verdade.</p>
+    <p>Você é <span class="highlight">incrível</span>, e merece coisas boas e momentos lindos.</p>
+    <p>Me desculpa por tudo... eu sei que sou difícil de entender às vezes. Sou um 💩 mesmo.</p>
+    <p>Por favor, <span class="highlight">beba água</span>, descanse e não se machuque tanto.</p>
+    <p>Eu tô torcendo por você, sempre.</p>
+    <p><span class="highlight">Não é um adeus</span> — e no que precisar, estarei aqui.</p>
+    <p>Obrigada por me mostrar o lado bom da vida.<br>Você me fez sentir pertencente a um lugar,obrigada</p>
+    <p>Gosto muito de você, e só quero o seu melhor.</p>
+    <p>E não se esquece, cearense: no que precisar, eu tô aqui. 🌌</p>
+<p>Te desejo o que ha de melhor no mundo,fica bem.</p><br>Clique em qualquer lugar, acho que vai funcionar..
+  </div>
+</div>
+
+<audio id="music" loop>
+  <source src="forever-young.mp3.mp3" type="audio/mpeg">
+  Seu navegador não suporta áudio.
+</audio>
+
+<button id="playBtn" onclick="playAudio()">🎵 Tocar Música</button>
+<canvas id="stars"></canvas>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let width, height, stars = [], meteors = [];
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function createStars(count) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.5,
+        speed: Math.random() * 0.5 + 0.2
+      });
+    }
+  }
+
+  function drawStars() {
+    ctx.fillStyle = '#fff';
+    stars.forEach(star => {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fill();
+      star.y += star.speed;
+      if (star.y > height) star.y = 0;
+    });
+  }
+
+  // 🌠 Estrelas cadentes
+  function createMeteor() {
+    meteors.push({
+      x: Math.random() * width,
+      y: Math.random() * height * 0.5,
+      length: Math.random() * 80 + 100,
+      speed: Math.random() * 10 + 6,
+      opacity: 1
+    });
+  }
+
+  function drawMeteors() {
+    for (let i = 0; i < meteors.length; i++) {
+      const m = meteors[i];
+      ctx.beginPath();
+      const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.length, m.y + m.length);
+      grad.addColorStop(0, `rgba(255,255,255,${m.opacity})`);
+      grad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.moveTo(m.x, m.y);
+      ctx.lineTo(m.x - m.length, m.y + m.length);
+      ctx.stroke();
+
+      m.x += -m.speed;
+      m.y += m.speed;
+      m.opacity -= 0.02;
+    }
+
+    meteors = meteors.filter(m => m.opacity > 0);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    drawStars();
+    drawMeteors();
+    if (Math.random() < 0.03) createMeteor(); // taxa de estrelas cadentes
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => {
+    resize();
+    createStars(150);
+  });
+
+  resize();
+  createStars(150);
+  animate();
+
+  // 🎵 Controle de áudio
+  const audio = document.getElementById('music');
+  const btn = document.getElementById('playBtn');
+  audio.volume = 0.6;
+
+  function playAudio() {
+    audio.play().then(() => {
+      btn.style.opacity = '0';
+      setTimeout(() => btn.style.display = 'none', 500);
+    }).catch(err => console.log("Erro ao tocar:", err));
+  }
+
+  // ✨ Efeito de texto
+  document.addEventListener('DOMContentLoaded', () => {
+    const paragraphs = document.querySelectorAll('#text p');
+    let index = 0;
+
+    function showNext() {
+      if (index < paragraphs.length) {
+        paragraphs[index].classList.add('visible');
+        index++;
+        setTimeout(showNext, 2000);
+      }
+    }
+    setTimeout(showNext, 1000);
+  });
+
+  document.body.addEventListener('click', function firstClick() {
+    playAudio();
+    document.body.removeEventListener('click', firstClick);
+  }, { once: true });
+</script>
+</body>
+</html>
+
